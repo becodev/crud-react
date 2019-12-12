@@ -12,7 +12,6 @@ code {
     monospace;
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
+.ver {
+  margin-bottom: 4px;
 }
