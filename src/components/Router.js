@@ -28,9 +28,20 @@ class Router extends Component {
     };
 
     borrarPost = (id) => {
-        console.log(id)
-    }
-    
+        axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
+            .then(res => {
+                if(res.status === 200) {
+                    const estado = [...this.state.posts];
+
+                    let resultado = estado.filter( value => (
+                        value.id != id
+                    ))
+                    this.setState( {
+                        posts: resultado
+                    })
+                };
+            }); 
+    };
     
     render() {
         return (
@@ -63,7 +74,6 @@ class Router extends Component {
                                         <SinglePost
                                             post={filtro[0]}
                                         />
-                                        
                                     )
                                 }
                             }></Route>
