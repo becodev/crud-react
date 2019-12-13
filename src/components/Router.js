@@ -5,6 +5,8 @@ import Header from './Header';
 import Navegacion from './Navegacion';
 import Posts from './Posts';
 import SinglePost from './SinglePost';
+import Formulario from './Formulario';
+import Swal from 'sweetalert2';
 
 class Router extends Component {
     constructor(){
@@ -32,7 +34,7 @@ class Router extends Component {
             .then(res => {
                 if(res.status === 200) {
                     const estado = [...this.state.posts];
-
+                    console.log("post borrado")
                     let resultado = estado.filter( value => (
                         value.id != id
                     ))
@@ -42,6 +44,28 @@ class Router extends Component {
                 };
             }); 
     };
+
+    crearPost = (post) => {
+        axios.post(`https://jsonplaceholder.typicode.com/posts`, {post})
+            .then(res => {
+                if(res.status === 201) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Post creado!',
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+                    let postId = {id: res.data.id};
+                    const nuevoPost = Object.assign({},res.data.post, postId)
+                    
+                    this.setState(prevState => ({
+                        posts: [...prevState.posts, nuevoPost]
+                    }));
+                }
+            })
+    }
+    
     
     render() {
         return (
@@ -77,10 +101,35 @@ class Router extends Component {
                                     )
                                 }
                             }></Route>
+
+                            <Route exact path="/crear" render={
+                                () => (
+                                    <Formulario 
+                                        crearPost= {this.crearPost}
+                                        />
+                                )
+                            } ></Route>
+
+                            <Route exact path="/post/:postId" render= {
+                                (props) => {
+                                    let idPost = props.location.pathname.replace('/post/','');
+                                    const posts = this.state.posts;                            
+                                 
+                                    let filtro = posts.filter(post => (
+                                        post.id === Number(idPost)
+                                        
+                                    ));
+                                    
+                                    return(
+                                        <SinglePost
+                                            post={filtro[0]}
+                                        />
+                                    )
+                                }
+                            }></Route>
                         </Switch>
                     </div>
                 </div>
-            
             </BrowserRouter>
         )
     }
