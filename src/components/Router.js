@@ -7,6 +7,7 @@ import Posts from './Posts';
 import SinglePost from './SinglePost';
 import Formulario from './Formulario';
 import Swal from 'sweetalert2';
+import Editar from './Editar';
 
 class Router extends Component {
     constructor(){
@@ -65,7 +66,35 @@ class Router extends Component {
                 }
             })
     }
-    
+
+    editarPost = (postActualizado) => {
+        const { id } = postActualizado;
+
+        axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`, {postActualizado})
+            .then(res => {
+                if(res.status === 200) {
+                    let postId = res.data.id;
+                    
+                    const posts = [...this.state.posts];
+
+                    const postEditar = posts.findIndex(post => postId === post.id);
+
+                    posts[postEditar] = postActualizado;
+
+                    this.setState({
+                        posts
+                    });
+
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Post actualizado!',
+                        showConfirmButton: false,
+                        timer: 1500
+                      });
+                }
+            });
+    };
     
     render() {
         return (
@@ -110,9 +139,9 @@ class Router extends Component {
                                 )
                             } ></Route>
 
-                            <Route exact path="/post/:postId" render= {
+                            <Route exact path="/editar/:postId" render= {
                                 (props) => {
-                                    let idPost = props.location.pathname.replace('/post/','');
+                                    let idPost = props.location.pathname.replace('/editar/','');
                                     const posts = this.state.posts;                            
                                  
                                     let filtro = posts.filter(post => (
@@ -121,8 +150,9 @@ class Router extends Component {
                                     ));
                                     
                                     return(
-                                        <SinglePost
+                                        <Editar
                                             post={filtro[0]}
+                                            editarPost={this.editarPost}
                                         />
                                     )
                                 }
