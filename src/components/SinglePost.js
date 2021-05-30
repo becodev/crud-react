@@ -1,28 +1,20 @@
-import React, { Component } from 'react';
+import React from "react";
 
-class SinglePost extends Component {
-    mostrarPost = (props) => {
-      
-        if(!props.post) return null;
-        const { title, body, userId } = this.props.post;
+const SinglePost = ({ post }) => {
+  const mostrarPost = (post) => {
+    if (!post) return null;
+    const { title, body, userId } = post;
 
-        return(
-            <React.Fragment>
-                <h1> { title } </h1>
-                <p>Autor: { userId } </p>
-                <p> { body } </p>
-            </React.Fragment>
-        )
+    return (
+      <>
+        <h1> {title} </h1>
+        <p>Author: {userId} </p>
+        <p> {body} </p>
+      </>
+    );
+  };
 
-    }
-    
-    render() { 
-        return ( 
-            <div className="col-12 col-md-8">
-                { this.mostrarPost(this.props) }
-            </div>
-         );
-    }
-}
- 
+  return <div className="col-12 col-md-8">{mostrarPost(post)}</div>;
+};
+
 export default SinglePost;

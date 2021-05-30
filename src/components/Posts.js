@@ -1,20 +1,12 @@
-import React, { Component } from 'react';
-import Listado from './Listado';
+import React from "react";
+import List from "./List";
 
-class Posts extends Component {
-    state = {  }
-    render() { 
-        return ( 
-            <div className="col-12 col-md-8">
-                <h2 className="text-center">  </h2>
-                <Listado
-                    posts={this.props.posts}
-                    borrarPost={this.props.borrarPost}
-                ></Listado>
-            
-            </div>
-         );
-    }
-}
- 
+const Posts = ({ posts, removePost }) => {
+  return (
+    <div className="col-12 col-md-8">
+      <List posts={posts} removePost={removePost} />
+    </div>
+  );
+};
+
 export default Posts;
